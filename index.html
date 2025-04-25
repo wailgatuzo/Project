@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta tags for character encoding and responsive viewport -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nomad Algeria - Discover Algeria's Beauty</title>
+    <!-- Link to Tailwind CSS CDN for styling -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Custom CSS for additional styling -->
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f1e9;
+            color: #2d3436;
+        }
+        /* Hero section background with gradient overlay */
+        .hero-bg {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('images2/algooo.png');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        /* Button styles for primary actions */
+        .btn-primary {
+            background-color: #d63031;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        /* Explore button styles */
+        .btn-explore {
+            background-color: #0984e3;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .btn-explore:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+        /* Back button styles */
+        .btn-back {
+            background-color: #2d3436;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .btn-back:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        /* Card styles for wilaya, places, taxis, hotels, and guides */
+        .card {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+        }
+        /* Hide sections by default, show when active */
+        .wilaya-section, .places-section, .taxi-section, .hotel-section, .guide-section, .place-details-section {
+            display: none;
+        }
+        .wilaya-section.active, .places-section.active, .taxi-section.active, .hotel-section.active, .guide-section.active, .place-details-section.active {
+            display: block;
+        }
+        /* Gallery image hover effect */
+        .gallery img {
+            transition: transform 0.3s ease;
+        }
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
+        /* Review card styling */
+        .review-card {
+            background-color: #f1f1f1;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Homepage Section -->
+    <section id="home" class="hero-bg">
+        <!-- Hero content with title, description, and call-to-action -->
+        <div>
+            <h1 class="text-5xl font-bold text-white mb-4">Nomad Algeria</h1>
+            <p class="text-xl text-white mb-6">Explore the breathtaking beauty of Algeria's landscapes and culture</p>
+            <button id="startJourney" class="btn-primary text-lg">Start Your Journey</button>
+        </div>
+    </section>
+
+    <!-- Wilaya Selection Section -->
+    <section id="wilayaSection" class="wilaya-section py-16 px-4">
+        <!-- Container for wilaya cards -->
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-8">Choose Your Destination</h2>
+            <div id="wilayaContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            <div class="text-center mt-8">
+                <button class="btn-back" onclick="backToHome()">Back to Home</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Places Section -->
+    <section id="placesSection" class="places-section py-16 px-4">
+        <!-- Container for place cards and navigation buttons -->
+        <div class="container mx-auto">
+            <h2 id="wilayaTitle" class="text-3xl font-bold text-center mb-8"></h2>
+            <div id="placesContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+            <div class="text-center mt-8">
+                <button class="btn-primary mr-4" onclick="showTaxis()">Get a Taxi</button>
+                <button class="btn-primary mr-4" onclick="showHotels()">Find Hotels</button>
+                <button class="btn-primary mr-4" onclick="showGuides()">Hire a Guide</button>
+                <button class="btn-back" onclick="backToWilaya()">Back to Destinations</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Place Details Section -->
+    <section id="placeDetailsSection" class="place-details-section py-16 px-4">
+        <!-- Container for place details, gallery, history, and reviews -->
+        <div class="container mx-auto">
+            <h2 id="placeTitle" class="text-3xl font-bold text-center mb-8"></h2>
+            <div class="gallery grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <img id="placeImage1" class="w-full h-64 object-cover rounded-lg" alt="Place Image">
+                <img id="placeImage2" class="w-full h-64 object-cover rounded-lg" alt="Place Image">
+                <img id="placeImage3" class="w-full h-64 object-cover rounded-lg" alt="Place Image">
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
+                <h3 class="text-2xl font-bold mb-4">History & Culture</h3>
+                <p id="placeDescription" class="text-gray-600"></p>
+            </div>
+            <div id="reviewsContainer" class="mb-8">
+                <h3 class="text-2xl font-bold mb-4">Reviews</h3>
+                <div id="reviewsList"></div>
+                <div class="mt-6">
+                    <h4 class="text-xl font-bold mb-2">Add Your Review</h4>
+                    <textarea id="reviewText" class="w-full p-4 border rounded-lg" rows="4" placeholder="Write your review..."></textarea>
+                    <button class="btn-primary mt-4" onclick="addPlaceReview()">Submit Review</button>
+                </div>
+            </div>
+            <div class="text-center">
+                <button class="btn-back" onclick="backToPlaces()">Back to Places</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Taxi Section -->
+    <section id="taxiSection" class="taxi-section py-16 px-4">
+        <!-- Container for taxi cards -->
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-8">Taxis in <span id="taxiWilaya"></span></h2>
+            <div id="taxiContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+            <div class="text-center mt-8">
+                <button class="btn-back" onclick="backToPlaces()">Back to Places</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hotel Section -->
+    <section id="hotelSection" class="hotel-section py-16 px-4">
+        <!-- Container for hotel cards -->
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-8">Hotels in <span id="hotelWilaya"></span></h2>
+            <div id="hotelContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+            <div class="text-center mt-8">
+                <button class="btn-back" onclick="backToPlaces()">Back to Places</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Guide Section -->
+    <section id="guideSection" class="guide-section py-16 px-4">
+        <!-- Container for guide cards and reviews -->
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-8">Guides in <span id="guideWilaya"></span></h2>
+            <div id="guideContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+            <div id="guideReviewsContainer" class="mt-8">
+                <h3 class="text-2xl font-bold mb-4">Reviews for <span id="guideReviewName"></span></h3>
+                <div id="guideReviewsList"></div>
+                <div class="mt-6">
+                    <h4 class="text-xl font-bold mb-2">Add Your Review</h4>
+                    <textarea id="guideReviewText" class="w-full p-4 border rounded-lg" rows="4" placeholder="Write your review..."></textarea>
+                    <button class="btn-primary mt-4" onclick="addGuideReview()">Submit Review</button>
+                </div>
+            </div>
+            <div class="text-center mt-8">
+                <button class="btn-back" onclick="backToPlaces()">Back to Places</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript for dynamic functionality -->
+    <script>
+        // Data structure containing wilaya information (places, taxis, hotels, guides)
+        const wilayaData = {
+            Algiers: {
+                description: "The vibrant capital with historic sites and Mediterranean charm.",
+                image: "images2/Algeria-1024x683.png",
+                places: [
+                    { 
+                        name: "Casbah of Algiers", 
+                        description: "A UNESCO World Heritage site with historic architecture.", 
+                        image: "images2/casbah1.jpg",
+                        history: "The Casbah is a historic citadel dating back to the 10th century, blending Ottoman, Berber, and Andalusian influences. It was a key center during Algeria's fight for independence.",
+                        images: [
+                            "images2/casbah2.jpg",
+                            "images2/casbah3.jpg",
+                            "images2/casbah4.jpg"
+                        ],
+                        reviews: [
+                            { text: "Amazing historical site, a must-visit!", author: "Sarah" },
+                            { text: "Felt like stepping back in time.", author: "Omar" }
+                        ]
+                    },
+                    { 
+                        name: "Notre Dame d'Afrique", 
+                        description: "A stunning basilica overlooking the Mediterranean.", 
+                        image: "images2/dameafrique6.jpg",
+                        history: "Built in 1872 by French settlers, this basilica is a symbol of religious harmony, visited by both Christians and Muslims.",
+                        images: [
+                            "images2/dameafrique1.jpg",
+                            "images2/dameafrique3.jpg",
+                            "images2/dameafrique4.jpg"
+                        ],
+                        reviews: [
+                            { text: "Breathtaking views and architecture.", author: "Lina" }
+                        ]
+                    },
+                    { 
+                        // Renamed from Jardin d'Essai to Hamma Test Garden for clarity
+                        name: "Hamma Test Garden", 
+                        description: "A beautiful botanical garden in the heart of Algiers.", 
+                        image: "images2/hamma1.jpg",
+                        history: "Established in 1832 in the Hamma district, this garden served as a testing ground for plants from around the world and is now a green oasis in the city.",
+                        images: [
+                            "images2/hamma2.jpg",
+                            "images2/hamma3.jpg",
+                            "images2/hamma4.jpg"
+                        ],
+                        reviews: [
+                            { text: "Perfect for a relaxing afternoon.", author: "Karim" }
+                        ]
+                    },
+                    { 
+                        // Renamed from Jardin d'Essai to Hamma Test Garden for clarity
+                        name: "Grande Mosquee", 
+                        description: "A beautiful botanical garden in the heart of Algiers.", 
+                        image: "images2/mosquee1.jpg",
+                        history: "Perched on Algiers waterfront, the Great Mosque is a modern architectural marvel, one of the largest mosques in the world. Completed in 2019, its sleek design blends Islamic motifs with contemporary elegance, featuring a towering 265-meter minaret. The vast prayer hall, serene courtyards, and intricate tilework create a spiritual and visual spectacle. Offering stunning Mediterranean views, it’s a must-visit for its grandeur and cultural significance.",
+                        images: [
+                            "images2/mosquee2.jpg",
+                            "images2/mosquee3.jpg",
+                            "images2/mosquee4.jpg"
+                        ],
+                        reviews: [
+                            { text: "Perfect for a relaxing afternoon.", author: "Karim" }
+                        ]
+                    },
+                    { 
+                        // Renamed from Jardin d'Essai to Hamma Test Garden for clarity
+                        name: "les beaux arts", 
+                        description: "A beautiful botanical garden in the heart of Algiers.", 
+                        image: "images2/musee2.jpg",
+                        history: "Located in Algiers, this museum showcases an impressive collection of Algerian and international art, from paintings to sculptures. A must-visit for art lovers exploring the city’s creative side.",
+                        images: [
+                            "images2/musee1.jpg",
+                            "images2/musee3.jpg",
+                            "images2/musee4.jpg"
+                        ],
+                        reviews: [
+                            { text: "Perfect for a relaxing afternoon.", author: "Karim" }
+                        ]
+                    }
+                ],
+                taxis: [
+                    { name: "Ahmed", car: "Peugeot 301", number: "+213-555-1234" },
+                    { name: "Fatima", car: "Renault Clio", number: "+213-555-5678" }
+                ],
+                hotels: [
+                    { name: "Hotel El Djazair", price: "100 USD/night", number: "+213-555-9012", image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" },
+                    { name: "Sofitel Algiers", price: "150 USD/night", number: "+213-555-3456", image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" }
+                ],
+                guides: [
+                    { 
+                        name: "Amina", 
+                        age: 34, 
+                        languages: ["Arabic", "French", "English"], 
+                        number: "+213-555-1122",
+                        reviews: [
+                            { text: "Amina was knowledgeable and friendly!", author: "Emma" }
+                        ]
+                    },
+                    { 
+                        name: "Youssef", 
+                        age: 28, 
+                        languages: ["Arabic", "English"], 
+                        number: "+213-555-3344",
+                        reviews: []
+                    }
+                ]
+            },
+            Boumardas: {
+                description: "A coastal region with serene beaches and historic towns.",
+                image: "images2/شاطىء بومرداس -الجزائر.png",
+                places: [
+                    { 
+                        name: "Cap Djinet Beach", 
+                        description: "A serene beach with clear waters.", 
+                        image: "images2/capdjinat3.jpg",
+                        history: "Cap Djinet is known for its tranquil shores, historically a fishing hub for local communities.",
+                        images: [
+                            "images2/capdjinat1.jpg",
+                            "images2/capdjinat2.jpg",
+                            "images2/capdjinat4.jpg"
+                        ],
+                        reviews: []
+                    },
+                    { 
+                        name: "Dellys ghar lhmam ", 
+                        description: "Historic town with Ottoman architecture.", 
+                        image: "images2/dellys1.jpg",
+                        history: "Dellys, founded in Phoenician times, features Ottoman-era structures and a rich maritime history.",
+                        images: [
+                            "images2/dellys.jpg",
+                            "images2/dellys3.jpg",
+                            "images2/dellys4.jpg"
+                        ],
+                        reviews: []
+                    },
+                    { 
+                        name: "zemmori", 
+                        description: "Ancient Roman ruins by the sea.", 
+                        image: "images2/zmori.jpg",
+                        history: "Tigzirt was a Roman port city, with ruins showcasing baths and temples from the 2nd century.",
+                        images: [
+                            "images2/zmori2.jpg",
+                            "images2/zmori3.jpg",
+                            "images2/zmori4.jpg"
+                        ],
+                        reviews: []
+                    },
+                    { 
+                        name: "tiza village", 
+                        description: "Ancient Roman ruins by the sea.", 
+                        image: "images2/tiza1.jpg",
+                        history: "Tiza is a small, peaceful village in Bombardas, known for its natural beauty, traditional homes, and warm local community..",
+                        images: [
+                            "images2/tiza2.jpg",
+                            "images2/tiza3.jpg",
+                            "images2/tiza33.jpg"
+                        ],
+                        reviews: []
+                    },
+                    { 
+                        name: "kasbah de dellys ", 
+                        description: "Historic town with Ottoman architecture.", 
+                        image: "images2/dellys5.jpg",
+                        history: "Dellys, founded in Phoenician times, features Ottoman-era structures and a rich maritime history.",
+                        images: [
+                            "images2/dellys6.jpg",
+                            "images2/dellys7.jpg",
+                            "images2/dellys8.jpg"
+                        ],
+                        reviews: []
+                    }
+                ],
+                taxis: [
+                    { name: "Karim", car: "Hyundai Accent", number: "+213-555-7890" }
+                ],
+                hotels: [
+                    { name: "Hotel Le Rocher", price: "80 USD/night", number: "+213-555-2345", image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" }
+                ],
+                guides: [
+                    { 
+                        name: "Sofiane", 
+                        age: 30, 
+                        languages: ["Arabic", "French"], 
+                        number: "+213-555-5566",
+                        reviews: []
+                    }
+                ]
+            },
+            Tamanrast: {
+                description: "A desert region with stunning dunes and ancient rock art.",
+                image: "images2/ALGERIA.png",
+                places: [
+                    { 
+                        name: "Hoggar mountaines", 
+                        description: "A UNESCO site with prehistoric rock art.", 
+                        image: "images2/Hoggar  2.jpg",
+                        history: "Tassili n'Ajjer contains over 15,000 rock paintings from 6000 BCE, depicting ancient Saharan life.",
+                        images: [
+                            "images2/Rock Art2.jpg",
+                            "HOGGAR3.jpeg",
+                            "images2/PHOTO++.jpg"
+                        ],
+                        reviews: []
+                    },
+                    { 
+                        name: "Assekrem", 
+                        description: "A lush oasis in the Sahara Desert.", 
+                        image: "images2/Assekrem2.jpg",
+                        history: "Djanet has been a Tuareg trading hub for centuries, centered around its life-giving oasis.",
+                        images: [
+                            "images2/Assekrem1.jpg",
+                            "images2/photo+.jpg",
+                            "Charles de Foucauld's Hermitage - Assekrem.jpg"
+                        ],
+                        reviews: []
+                    },
+                    { 
+                        name: "Afilal", 
+                        description: "Stunning sand dunes in the desert.", 
+                        image: "images2/(background).jpg",
+                        history: "Erg Admer's vast dunes have been shaped by millennia of wind, a sacred site for local nomads.",
+                        images: [
+                            "images2/Afilal2.jpg",
+                            "images2/Afilal4.png",
+                            "images2/Afilal 1.jpg"
+                        ],
+                        reviews: []
+                    }
+                ],
+                taxis: [
+                    { name: "Moussa", car: "Toyota Land Cruiser", number: "+213-555-6789" }
+                ],
+                hotels: [
+                    { name: "Djanet Lodge", price: "120 USD/night", number: "+213-555-4567", image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" }
+                ],
+                guides: [
+                    { 
+                        name: "Hakim", 
+                        age: 42, 
+                        languages: ["Arabic", "Tamasheq", "French"], 
+                        number: "+213-555-7788",
+                        reviews: []
+                    }
+                ]
+            },
+            Bejaia: {
+                description: "A coastal gem with mountains and historic sites.",
+                image: "images2/Béjaïa 🇩🇿.png",
+                places: [
+                    { 
+                        name: "Cap Carbon", 
+                        description: "A scenic lighthouse with panoramic views.", 
+                        image: "images2/capcarbon1.jpg",
+                        history: "Cap Carbon, with its 19th-century lighthouse, was a strategic point during colonial times.",
+                        images: [
+                            "images2/capcarbon2.jpg",
+                            "images2/capcarbon3.jpg",
+                            "images2/capcarbon4.jpg"
+                        ],
+                        reviews: []
+                    },
+                    { 
+                        name: "Yemma Gouraya", 
+                        description: "A mountain with a historic fort.", 
+                        image: "images2/goraya1.jpg",
+                        history: "Yemma Gouraya's fort was built by the Spanish in the 16th century to control the coast.",
+                        images: [
+                            "images2/goraya2.jpg",
+                            "images2/goraya3.jpg",
+                            "images2/goraya4.jpg"
+                        ],
+                        reviews: []
+                    },
+                    { 
+                        name: "les agouauades", 
+                        description: "A popular beach for relaxation.", 
+                        image: "images2/les agoauades4.jpg",
+                        history: "Tichy has been a leisure destination since the 20th century, attracting locals and tourists.",
+                        images: [
+                            "images2/les aiguades4.jpg",
+                            "images2/les agoauades2.jpg",
+                            "images2/les agoauades3.jpg"
+                        ],
+                        reviews: []
+                    },
+                    { 
+                        // Corrected description and removed duplicate entry
+                        name: "Cascades de Kefrida", 
+                        description: "A stunning waterfall surrounded by lush nature.", 
+                        image: "images2/kfrida2.jpg",
+                        history: "Kefrida Waterfalls, located in a verdant valley, have been a natural attraction for centuries, drawing visitors for their scenic beauty.",
+                        images: [
+                            "images2/kfrida1.jpg",
+                            "images2/kfrida3.jpg",
+                            "images2/kfrida4.jpg"
+                        ],
+                        reviews: []
+                    },
+                    { 
+                        // Corrected description and removed duplicate entry
+                        name: "Casbah of Béjaïa", 
+                        description: "A stunning waterfall surrounded by lush nature.", 
+                        image: "images2/kasaba.jpg",
+                        history: "Kefrida Waterfalls, located in a verdant valley, have been a natural attraction for centuries, drawing visitors for their scenic beauty.",
+                        images: [
+                            "images2/kasba2.jpg",
+                            "images2/kasba3.jpg",
+                            "images2/kasba4.jpg"
+                        ],
+                        reviews: []
+                    }
+                ],
+                taxis: [
+                    { name: "Sami", car: "Dacia Logan", number: "+213-555-8901" },
+                    { name: "khaled", car: "polo 2014", number: "+213-785-8901" }
+                ],
+                hotels: [
+                    { name: "Hotel Royal Bejaia", price: "90 USD/night", number: "+213-555-5678", image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" }
+                ],
+                guides: [
+                    { 
+                        name: "Nadia", 
+                        age: 29, 
+                        languages: ["Arabic", "French", "Kabyle"], 
+                        number: "+213-555-9900",
+                        reviews: []
+                    }
+                ]
+            },
+            Oran: {
+                description: "A lively coastal city with a rich cultural heritage.",
+                image: "images2/ORAN Gallery.png",
+                places: [
+                    { 
+                        name: "Santa Cruz Fort", 
+                        description: "A historic fort with sea views.", 
+                        image: "images2/lala mariem.jpg",
+                        history: "Built by the Spanish in the 16th century, Santa Cruz Fort was a key defensive structure.",
+                        images: [
+                            "images2/BAGROUND.jpg",
+                            "images2/lala mariem.jpg",
+                            "images2/lala marieem.jpeg"
+                        ],
+                        reviews: []
+                    },
+                    { 
+                        name: "front de mer", 
+                        description: "A vibrant seaside promenade.", 
+                        image: "images2/frant de mer.jpg",
+                        history: "The Corniche has been Oran's social hub since the early 20th century, known for its lively atmosphere.",
+                        images: [
+                            "images2/front de.jpeg",
+                            "images2/front oran.jpg",
+                            "images2/Front-de-mer-Oran.webp"
+                        ],
+                        reviews: []
+                    },
+                    { 
+                        name: "cathedrale oran", 
+                        description: "A museum of history and culture.", 
+                        image: "images2/cathedrale-BAGROUND.jpg",
+                        history: "Named after a national hero, this museum showcases Oran's role in Algeria's independence.",
+                        images: [
+                            "images2/cathedrale oran.jpg",
+                            "images2/la cathédrale.png",
+                            "images2/la-cathedrale-du-sacre.jpg"
+                        ],
+                        reviews: []
+                    },
+                    { 
+                        name: "La Maririe", 
+                        description: "A museum of history and culture.", 
+                        image: "images2/La Mairie 2.jpg",
+                        history: "Named after a national hero, this museum showcases Oran's role in Algeria's independence.",
+                        images: [
+                            "images2/La Mairie.jpg",
+                            "images2/theatre regional.jpg",
+                            "images2/Théâtre_oran.jpg"
+                        ],
+                        reviews: []
+                    },
+                    { 
+                        name: "oran palges", 
+                        description: "A museum of history and culture.", 
+                        image: "images2/PLAGE BAGROUND.jpg",
+                        history: "Named after a national hero, this museum showcases Oran's role in Algeria's independence.",
+                        images: [
+                            "images2/madagh-02.jpg",
+                            "images2/PLAGE CAP FALCON.jpg",
+                            "images2/plage LES ANDALOUSE.jpg"
+                        ],
+                        reviews: []
+                    }
+                ],
+                taxis: [
+                    { name: "Rachid", car: "Volkswagen Polo", number: "+213-555-9012" }
+                ],
+                hotels: [
+                    { name: "Le Meridien Oran", price: "140 USD/night", number: "+213-555-6789", image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" }
+                ],
+                guides: [
+                    { 
+                        name: "Karim", 
+                        age: 36, 
+                        languages: ["Arabic", "French", "Spanish"], 
+                        number: "+213-555-2233",
+                        reviews: []
+                    }
+                ]
+            },
+            Gherdaia: {
+                description: "A desert valley with unique architecture and culture.",
+                image: "images2/download (3).png",
+                places: [
+                    { 
+                        name: "M'Zab Valley", 
+                        description: "A UNESCO site with unique architecture.", 
+                        image: "images2/bni mzab.jpg",
+                        history: "The M'Zab Valley, founded in the 10th century by the Ibadis, is known for its five fortified towns.",
+                        images: [
+                            "images2/bnimzab2.jpg",
+                            "images2/bnimzab3.jpg",
+                            "images2/bnimzab4.jpg"
+                        ],
+                        reviews: []
+                    },
+                    { 
+                        name: "Beni Isguen", 
+                        description: "A historic walled city.", 
+                        image: "https://images.unsplash.com/photo-1611746872913-2c5d7f0b85a5",
+                        history: "Beni Isguen, one of M'Zab's five towns, is famous for its traditional market and strict cultural codes.",
+                        images: [
+                            "https://images.unsplash.com/photo-1611746872913-2c5d7f0b85a5",
+                            "https://images.unsplash.com/photo-1602002418816-8c61f0b44644",
+                            "https://images.unsplash.com/photo-1593642532973-d31b97d0eb4c"
+                        ],
+                        reviews: []
+                    },
+                    { 
+                        name: "Ghardaia Market", 
+                        description: "A vibrant traditional market.",  
+                        image: "https://images.unsplash.com/photo-1611746872913-2c5d7f0b85a5",
+                        history: "The market has been a trading center for centuries, offering local crafts and produce.",
+                        images: [ 
+                            "https://images.unsplash.com/photo-1611746872913-2c5d7f0b85a5",
+                            "https://images.unsplash.com/photo-1602002418816-8c61f0b44644",
+                            "https://images.unsplash.com/photo-1593642532973-d31b97d0eb4c"
+                        ],
+                        reviews: []
+                    }
+                ],
+                taxis: [
+                    { name: "Hassan", car: "Fiat Panda", number: "+213-555-1234" }             
+                ],
+                hotels: [
+                    { name: "Maison M'Zab", price: "110 USD/night", number: "+213-555-8901", image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" }
+                ],
+                guides: [
+                    { 
+                        name: "Fatima", 
+                        age: 38, 
+                        languages: ["Arabic", "French"], 
+                        number: "+213-555-4455",
+                        reviews: []
+                    }
+                ]
+            },
+            Constantine: {
+                description: "The city of bridges with a rich Roman heritage.",
+                image: "images2/Constantine Algeria  by Mohamed Larbi Larouk — YouPic.png",
+                places: [
+                    { 
+                        name: "Suspension Bridges", 
+                        description: "Iconic bridges over deep gorges.", 
+                        image: "images2/photo_2025-04-25_23-26-43.jpg",
+                        history: "Constantine's bridges, built in the 19th and 20th centuries, are engineering marvels connecting the city.",
+                        images: [
+                            "images2/photo_2025-04-25_23-26-04.jpg",
+                            "images2/photo_2025-04-25_23-13-13.jpg",
+                            "images2/photo_2025-04-25_23-25-57.jpg"
+                        ],
+                        reviews: []
+                    },
+                    { 
+                        name: "Emir Abdelkader Mosque", 
+                        description: "A grand mosque with stunning architecture.", 
+                        image: "images2/photo_2025-04-25_23-12-54.jpg",
+                        history: "Built in 1994, this mosque honors the national hero Emir Abdelkader and is a cultural landmark.",
+                        images: [
+                            "images2/photo_2025-04-25_23-13-08.jpg",
+                            "images2/photo_2025-04-25_23-13-13.jpg",
+                            "images2/photo_2025-04-25_23-26-48.jpg"
+                        ],
+                        reviews: []
+                    },
+                    { 
+                        name: "old town", 
+                        description: "A museum showcasing Roman artifacts.", 
+                        image: "images2/photo_2025-04-25_23-11-20.jpg",
+                        history: "Located in ancient Cirta, this museum houses artifacts from the Roman and Numidian periods.",
+                        images: [
+                            "images2/photo_2025-04-25_23-11-20.jpg",
+                            "images2/photo_2025-04-25_23-11-29.jpg",
+                            "images2/photo_2025-04-25_23-11-29.jpg"
+                        ],
+                        reviews: []
+                    }
+                ],
+                taxis: [
+                    { name: "Youssef", car: "Kia Rio", number: "+213-555-3456" }
+                ],
+                hotels: [
+                    { name: "Hotel Cirta", price: "95 USD/night", number: "+213-555-2345", image: "https://images.unsplash.com/photo-1566073771259-6a8506099945" }
+                ],
+                guides: [
+                    { 
+                        name: "Rachid", 
+                        age: 45, 
+                        languages: ["Arabic", "French", "English"], 
+                        number: "+213-555-6677",
+                        reviews: []
+                    }
+                ]
+            }
+        };
+
+        // Global variables for tracking current wilaya, place, and guide
+        let currentWilaya = '';
+        let currentPlace = null;
+        let currentGuide = null;
+
+        // Event listener for starting the journey
+        document.getElementById('startJourney').addEventListener('click', () => {
+            document.getElementById('home').style.display = 'none';
+            document.getElementById('wilayaSection').classList.add('active');
+            renderWilayaCards();
+        });
+
+        // Render wilaya cards dynamically
+        function renderWilayaCards() {
+            const wilayaContainer = document.getElementById('wilayaContainer');
+            wilayaContainer.innerHTML = '';
+            Object.keys(wilayaData).forEach(wilaya => {
+                wilayaContainer.innerHTML += `
+                    <div class="card">
+                        <img src="${wilayaData[wilaya].image}" alt="${wilaya}" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h3 class="text-xl font-bold">${wilaya}</h3>
+                            <p class="text-gray-600">${wilayaData[wilaya].description}</p>
+                            <button class="btn-explore mt-4" onclick="showPlaces('${wilaya}')">Explore ${wilaya}</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Show places for the selected wilaya
+        function showPlaces(wilaya) {
+            currentWilaya = wilaya;
+            document.getElementById('wilayaSection').classList.remove('active');
+            document.getElementById('placesSection').classList.add('active');
+            document.getElementById('wilayaTitle').textContent = `Explore ${wilaya}`;
+
+            const placesContainer = document.getElementById('placesContainer');
+            placesContainer.innerHTML = '';
+            wilayaData[wilaya].places.forEach(place => {
+                placesContainer.innerHTML += `
+                    <div class="card cursor-pointer" onclick="showPlaceDetails('${wilaya}', '${place.name}')">
+                        <img src="${place.image}" alt="${place.name}" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h3 class="text-xl font-bold">${place.name}</h3>
+                            <p class="text-gray-600">${place.description}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Show detailed information for a specific place
+        function showPlaceDetails(wilaya, placeName) {
+            currentPlace = wilayaData[wilaya].places.find(p => p.name === placeName);
+            document.getElementById('placesSection').classList.remove('active');
+            document.getElementById('placeDetailsSection').classList.add('active');
+
+            document.getElementById('placeTitle').textContent = currentPlace.name;
+            document.getElementById('placeImage1').src = currentPlace.images[0];
+            document.getElementById('placeImage2').src = currentPlace.images[1];
+            document.getElementById('placeImage3').src = currentPlace.images[2];
+            document.getElementById('placeDescription').textContent = currentPlace.history;
+
+            const reviewsList = document.getElementById('reviewsList');
+            reviewsList.innerHTML = '';
+            currentPlace.reviews.forEach(review => {
+                reviewsList.innerHTML += `
+                    <div class="review-card">
+                        <p class="text-gray-600">"${review.text}"</p>
+                        <p class="text-gray-800 font-bold">- ${review.author}</p>
+                    </div>
+                `;
+            });
+        }
+
+        // Add a review for the current place
+        function addPlaceReview() {
+            const reviewText = document.getElementById('reviewText').value;
+            if (reviewText.trim()) {
+                currentPlace.reviews.push({ text: reviewText, author: "Anonymous" });
+                document.getElementById('reviewText').value = '';
+                showPlaceDetails(currentWilaya, currentPlace.name); // Refresh reviews
+            }
+        }
+
+        // Show taxis for the current wilaya
+        function showTaxis() {
+            document.getElementById('placesSection').classList.remove('active');
+            document.getElementById('taxiSection').classList.add('active');
+            document.getElementById('taxiWilaya').textContent = currentWilaya;
+
+            const taxiContainer = document.getElementById('taxiContainer');
+            taxiContainer.innerHTML = '';
+            wilayaData[currentWilaya].taxis.forEach(taxi => {
+                taxiContainer.innerHTML += `
+                    <div class="card">
+                        <div class="p-4">
+                            <h3 class="text-xl font-bold">${taxi.name}</h3>
+                            <p class="text-gray-600">Car: ${taxi.car}</p>
+                            <p class="text-gray-600">Contact: ${taxi.number}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Show hotels for the current wilaya
+        function showHotels() {
+            // Fixed typo: Changed 'places.vmSection' to 'placesSection'
+            document.getElementById('placesSection').classList.remove('active');
+            document.getElementById('hotelSection').classList.add('active');
+            document.getElementById('hotelWilaya').textContent = currentWilaya;
+
+            const hotelContainer = document.getElementById('hotelContainer');
+            hotelContainer.innerHTML = '';
+            wilayaData[currentWilaya].hotels.forEach(hotel => {
+                hotelContainer.innerHTML += `
+                    <div class="card">
+                        <img src="${hotel.image}" alt="${hotel.name}" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h3 class="text-xl font-bold">${hotel.name}</h3>
+                            <p class="text-gray-600">Price: ${hotel.price}</p>
+                            <p class="text-gray-600">Contact: ${hotel.number}</p>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Show guides for the current wilaya
+        function showGuides() {
+            document.getElementById('placesSection').classList.remove('active');
+            document.getElementById('guideSection').classList.add('active');
+            document.getElementById('guideWilaya').textContent = currentWilaya;
+
+            const guideContainer = document.getElementById('guideContainer');
+            guideContainer.innerHTML = '';
+            wilayaData[currentWilaya].guides.forEach(guide => {
+                guideContainer.innerHTML += `
+                    <div class="card cursor-pointer" onclick="showGuideReviews('${guide.name}')">
+                        <div class="p-4">
+                            <h3 class="text-xl font-bold">${guide.name}</h3>
+                            <p class="text-gray-600">Age: ${guide.age}</p>
+                            <p class="text-gray-600">Languages: ${guide.languages.join(', ')}</p>
+                            <p class="text-gray-600">Contact: ${guide.number}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Clear review section initially
+            document.getElementById('guideReviewName').textContent = '';
+            document.getElementById('guideReviewsList').innerHTML = '';
+            currentGuide = null;
+        }
+
+        // Show reviews for a specific guide
+        function showGuideReviews(guideName) {
+            currentGuide = wilayaData[currentWilaya].guides.find(g => g.name === guideName);
+            document.getElementById('guideReviewName').textContent = currentGuide.name;
+
+            const reviewsList = document.getElementById('guideReviewsList');
+            reviewsList.innerHTML = '';
+            currentGuide.reviews.forEach(review => {
+                reviewsList.innerHTML += `
+                    <div class="review-card">
+                        <p class="text-gray-600">"${review.text}"</p>
+                        <p class="text-gray-800 font-bold">- ${review.author}</p>
+                    </div>
+                `;
+            });
+        }
+
+        // Add a review for the current guide
+        function addGuideReview() {
+            const reviewText = document.getElementById('guideReviewText').value;
+            if (reviewText.trim() && currentGuide) {
+                currentGuide.reviews.push({ text: reviewText, author: "Anonymous" });
+                document.getElementById('guideReviewText').value = '';
+                showGuideReviews(currentGuide.name); // Refresh reviews
+            }
+        }
+
+        // Navigate back to the homepage
+        function backToHome() {
+            document.getElementById('wilayaSection').classList.remove('active');
+            document.getElementById('home').style.display = 'flex';
+        }
+
+        // Navigate back to the wilaya selection
+        function backToWilaya() {
+            document.getElementById('placesSection').classList.remove('active');
+            document.getElementById('wilayaSection').classList.add('active');
+            renderWilayaCards();
+        }
+
+        // Navigate back to the places section
+        function backToPlaces() {
+            document.getElementById('taxiSection').classList.remove('active');
+            document.getElementById('hotelSection').classList.remove('active');
+            document.getElementById('guideSection').classList.remove('active');
+            document.getElementById('placeDetailsSection').classList.remove('active');
+            document.getElementById('placesSection').classList.add('active');
+        }
+    </script>
+</body>
+</html>
